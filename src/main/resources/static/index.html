@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>QuickBite</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+    <div class="nav-left">
+        <div class="logo">🥑 QuickBite</div>
+        <div class="nav-links">
+            <button class="nav-link active" onclick="showPage('home',this)">Home</button>
+            <button class="nav-link" onclick="showPage('track',this)">Track Order</button>
+            <button class="nav-link" onclick="showPage('profile',this)">My Orders</button>
+        </div>
+    </div>
+    <div class="nav-right">
+        <button class="cart-btn" onclick="showPage('cart',null)">
+            🛒 Cart <span id="cart-count">0</span>
+        </button>
+        <button class="btn-outline" onclick="showPage('login',null)">Login</button>
+        <button class="btn-solid" onclick="showPage('register',null)">Sign up</button>
+    </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🚀 Fast delivery · 200+ restaurants</div>
+            <h1>Hungry? <br/>We've got you <span>covered.</span></h1>
+            <p>Order from the best local restaurants and get food delivered to your door in minutes.</p>
+            <div class="search-wrap">
+                <input type="text" id="search-input" placeholder="Search for food or restaurants..." oninput="searchRestaurants(this.value)"/>
+                <button onclick="searchRestaurants(document.getElementById('search-input').value)">Search</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><strong>200+</strong><span>Restaurants</span></div>
+                <div class="stat-div"></div>
+                <div class="stat"><strong>25 min</strong><span>Avg delivery</span></div>
+                <div class="stat-div"></div>
+                <div class="stat"><strong>4.8 ★</strong><span>User rating</span></div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-card">
+                <div class="hc-row"><span class="hc-emoji">🍕</span><div><div class="hc-name">Margherita Pizza</div><div class="hc-rest">Pizzeria Roma</div></div><div class="hc-price">$14.99</div></div>
+                <div class="hc-row"><span class="hc-emoji">🍜</span><div><div class="hc-name">Ramen Bowl</div><div class="hc-rest">Tokyo Kitchen</div></div><div class="hc-price">$12.50</div></div>
+                <div class="hc-row"><span class="hc-emoji">🍔</span><div><div class="hc-name">Classic Burger</div><div class="hc-rest">Burger Barn</div></div><div class="hc-price">$11.99</div></div>
+                <div class="hc-track">
+                    <div class="hct-label">Order #QB-2847 · En route 🛵</div>
+                    <div class="hct-bar"><div class="hct-fill"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BROWSE -->
+    <div class="browse">
+        <div class="browse-header">
+            <h2>Browse restaurants</h2>
+            <div class="chips" id="cuisine-chips">
+                <button class="chip active" onclick="filterCuisine(this,'')">All</button>
+                <button class="chip" onclick="filterCuisine(this,'Italian')">🍕 Italian</button>
+                <button class="chip" onclick="filterCuisine(this,'Asian')">🍜 Asian</button>
+                <button class="chip" onclick="filterCuisine(this,'American')">🍔 American</button>
+                <button class="chip" onclick="filterCuisine(this,'Japanese')">🍣 Japanese</button>
+                <button class="chip" onclick="filterCuisine(this,'Mexican')">🌮 Mexican</button>
+                <button class="chip" onclick="filterCuisine(this,'Desserts')">🍰 Desserts</button>
+            </div>
+        </div>
+        <div class="restaurant-grid" id="restaurant-grid">
+            <div class="loading-state">Loading restaurants...</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- MENU PAGE -->
+<div class="page" id="page-menu">
+    <div class="page-topbar">
+        <button class="back-btn" onclick="showPage('home',null)">← Back</button>
+        <div>
+            <h2 id="menu-rest-name">Restaurant</h2>
+            <p id="menu-rest-meta" class="page-meta"></p>
+        </div>
+    </div>
+    <div class="menu-wrap">
+        <div class="menu-grid" id="menu-grid">
+            <div class="loading-state">Loading menu...</div>
+        </div>
+    </div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="page-cart">
+    <div class="page-topbar">
+        <button class="back-btn" onclick="showPage('home',null)">← Continue shopping</button>
+        <h2>Your cart</h2>
+    </div>
+    <div class="cart-wrap">
+        <div class="cart-left" id="cart-items"></div>
+        <div class="cart-right">
+            <div class="summary-box">
+                <h3>Order summary</h3>
+                <div class="sum-row"><span>Subtotal</span><span id="s-sub">$0.00</span></div>
+                <div class="sum-row"><span>Delivery fee</span><span>$2.99</span></div>
+                <div class="sum-row"><span>Tax (8%)</span><span id="s-tax">$0.00</span></div>
+                <div class="sum-divider"></div>
+                <div class="sum-total"><span>Total</span><span id="s-total">$0.00</span></div>
+                <button class="btn-solid full" onclick="placeOrder()">Place order</button>
+                <div class="secure-note">🔒 Secure mock payment</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN PAGE -->
+<div class="page" id="page-login">
+    <div class="auth-wrap">
+        <div class="auth-box">
+            <div class="auth-logo">🥑 QuickBite</div>
+            <h2>Welcome back</h2>
+            <p class="auth-sub">Login to your account</p>
+            <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@email.com"/></div>
+            <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="••••••••"/></div>
+            <button class="btn-solid full" onclick="login()">Login</button>
+            <div id="login-err" class="err-msg"></div>
+            <p class="auth-switch">No account? <a onclick="showPage('register',null)">Sign up free</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- REGISTER PAGE -->
+<div class="page" id="page-register">
+    <div class="auth-wrap">
+        <div class="auth-box">
+            <div class="auth-logo">🥑 QuickBite</div>
+            <h2>Create account</h2>
+            <p class="auth-sub">Join thousands of happy customers</p>
+            <div class="field"><label>Full name</label><input type="text" id="reg-name" placeholder="Alex Johnson"/></div>
+            <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="you@email.com"/></div>
+            <div class="field"><label>Phone</label><input type="text" id="reg-phone" placeholder="1234567890"/></div>
+            <div class="field"><label>Password</label><input type="password" id="reg-pass" placeholder="••••••••"/></div>
+            <button class="btn-solid full" onclick="register()">Create account</button>
+            <div id="reg-err" class="err-msg"></div>
+            <p class="auth-switch">Have an account? <a onclick="showPage('login',null)">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- TRACK PAGE -->
+<div class="page" id="page-track">
+    <div class="track-wrap">
+        <h2>Live order tracking</h2>
+        <div class="track-eta-card">
+            <div class="track-eta">25 min</div>
+            <div class="track-eta-lbl">Estimated delivery time</div>
+            <div class="track-status">🛵 Your order is on the way!</div>
+        </div>
+        <div class="track-steps">
+            <div class="ts-step done"><div class="ts-dot done">✓</div><div class="ts-lbl">Order placed</div></div>
+            <div class="ts-line done"></div>
+            <div class="ts-step done"><div class="ts-dot done">✓</div><div class="ts-lbl">Confirmed</div></div>
+            <div class="ts-line done"></div>
+            <div class="ts-step done"><div class="ts-dot done">✓</div><div class="ts-lbl">Preparing</div></div>
+            <div class="ts-line active"></div>
+            <div class="ts-step active"><div class="ts-dot active">●</div><div class="ts-lbl">En route</div></div>
+            <div class="ts-line"></div>
+            <div class="ts-step"><div class="ts-dot"></div><div class="ts-lbl">Delivered</div></div>
+        </div>
+        <div class="track-order-box">
+            <div class="tob-header">
+                <span class="tob-id">Order #QB-2847</span>
+                <span class="tob-status preparing">Preparing</span>
+            </div>
+            <div class="tob-items">2× Margherita Pizza · 1× Garlic Bread</div>
+            <div class="tob-footer">
+                <span>Pizzeria Roma</span>
+                <span class="tob-price">$32.47</span>
+            </div>
+        </div>
+        <div class="track-notif">📧 Email updates active &nbsp;·&nbsp; 📱 SMS notifications on</div>
+    </div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div class="page" id="page-profile">
+    <div class="profile-wrap">
+        <div class="profile-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar" id="p-avatar">AJ</div>
+                <div class="profile-name" id="p-name">Alex Johnson</div>
+                <div class="profile-email" id="p-email">alex@gmail.com</div>
+                <div class="profile-menu">
+                    <div class="pm-item active">Order history</div>
+                    <div class="pm-item">Saved addresses</div>
+                    <div class="pm-item">Payment methods</div>
+                    <div class="pm-item">Notifications</div>
+                </div>
+                <button class="btn-outline full" style="margin-top:1rem;" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="profile-content">
+            <h2>Order history</h2>
+            <div id="order-history"><div class="loading-state">Loading orders...</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
